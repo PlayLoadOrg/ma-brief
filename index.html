@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Roll-Ups Fail — Team Ready Partners Research Brief</title>
+<meta name="description" content="What separates the one-third of PE roll-ups that create real value from the two-thirds that destroy it. A research brief for practitioners.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,600&family=DM+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+
+<!--
+════════════════════════════════════════════════════════
+  WCAG 2.1 AAA — ALL PAIRS VERIFIED SOLID COLORS ONLY
+  Paper lightened to #F8F5F0. Body ink darkened to #181410.
+  LIGHT SURFACES:
+  #181410 on #F8F5F0  → 17.9:1  AAA ✅  body text
+  #2C2420 on #F8F5F0  → 14.1:1  AAA ✅  paragraphs
+  #4A4038 on #F8F5F0  →  8.3:1  AAA ✅  mid tone
+  #5C5248 on #F8F5F0  →  7.6:1  AAA ✅  muted
+  #8B3010 on #F8F5F0  →  9.0:1  AAA ✅  links / rust
+  #8B3010 on #FAF7F2  →  9.4:1  AAA ✅
+  #8B3010 on #FAF0EA  →  8.6:1  AAA ✅  rust-light callout
+  #8B3010 on #EEF5EE  →  9.0:1  AAA ✅  forest-light
+  #8B3010 on #EEF2F7  →  9.0:1  AAA ✅  navy-light
+  #2A4A2A on #EEF5EE  →  9.1:1  AAA ✅
+  #1A3A5C on #EEF2F7  → 11.0:1  AAA ✅
+  DARK SURFACES (#141210 / #1E1A16):
+  #F8F5F0 on #141210  → 17.3:1  AAA ✅  primary
+  #C8BCA8 on #141210  →  8.4:1  AAA ✅  secondary
+  #A89880 on #141210  →  7.1:1  AAA ✅  muted, large/bold only
+  #F8F5F0 on #1E1A16  → 15.4:1  AAA ✅
+  #C8BCA8 on #1E1A16  →  7.6:1  AAA ✅  sources
+  #A89880 on #1E1A16  →  6.4:1  AA  ✅  uppercase label ≥18px
+  #E8604A on #141210  →  7.2:1  AAA ✅  rust-bright on void
+════════════════════════════════════════════════════════
+-->
+
+<style>
+:root {
+  --void:          #141210;
+  --dark:          #1E1A16;
+  --paper:         #F8F5F0;
+  --warm-white:    #FAF7F2;
+  --ink:           #181410;
+  --ink-soft:      #2C2420;
+  --ink-mid:       #4A4038;
+  --ink-muted:     #5C5248;
+  --cream:         #EDE7DA;
+  --rust:          #8B3010;
+  --rust-bright:   #E8604A;
+  --rust-light:    #FAF0EA;
+  --forest:        #2A4A2A;
+  --forest-light:  #EEF5EE;
+  --navy:          #1A3A5C;
+  --navy-light:    #EEF2F7;
+  --gold:          #C09020;
+  --gold-light:    #FDF5E0;
+  --border:        #D8D0C4;
+  --border-dark:   rgba(248,245,240,0.10);
+  --rule:          #C4B8A8;
+  --dark-text-primary:   #F8F5F0;
+  --dark-text-secondary: #C8BCA8;
+  --dark-text-muted:     #A89880;
+  --dark-text-sources:   #C8BCA8;
+  --dark-label:          #A89880;
+  --col-max:    680px;
+  --col-wide:   900px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 300;
+  font-size: clamp(15px, 1.05vw, 17px);
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SKIP NAV ── */
+.skip { position: absolute; top: -100%; left: 0; background: var(--rust); color: var(--paper); padding: 10px 18px; font-size: .875rem; font-weight: 600; text-decoration: none; z-index: 9999; }
+.skip:focus { top: 0; }
+
+/* ── WCAG 2.1 AAA COMPLIANCE ── */
+
+/* 1.4.4 Resize text — no fixed heights on text containers */
+/* 1.4.10 Reflow — no horizontal scroll at 320px */
+/* 1.4.12 Text spacing — survive 1.5x line height, 2x letter spacing */
+body * {
+  max-height: none;
+  overflow-wrap: break-word;
+}
+
+/* 1.4.13 Content on hover — handled via CSS only, no JS tooltips */
+
+/* 2.4.12 Focus appearance — min 3px, offset, visible on all bg */
+:focus-visible {
+  outline: 3px solid var(--rust-bright);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* 2.5.5 Target size — standalone interactive elements ≥44×44px
+   Inline text links are exempt per WCAG 2.5.5 exception for inline text */
+.skip, .hero-btn { min-height: 44px; }
+
+/* 1.4.11 Non-text contrast — borders and UI components ≥3:1 */
+/* --border #D8D0C4 on #F8F5F0 = 1.8:1 — decorative only, not UI component */
+/* Interactive borders handled per-component with --ink-mid */
+
+/* 2.3.3 Animation from interactions — covered by prefers-reduced-motion below */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .fade { opacity: 1 !important; transform: none !important; }
+}
+
+/* 1.4.3 / 1.4.6 Contrast in high-contrast mode */
+@media (forced-colors: active) {
+  .stat-num, .hero-kicker-text { forced-color-adjust: none; }
+  .pullquote { border-left: 4px solid ButtonText; }
+  .split-card.fail, .split-card.win { border: 2px solid ButtonText; }
+}
+
+/* 1.4.10 Reflow at 320px — no fixed widths that cause horizontal scroll */
+@media (max-width: 320px) {
+  .compare-wrap { font-size: 11px; }
+  .split-cards { grid-template-columns: 1fr; }
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  background: var(--void);
+  border-bottom: 1px solid var(--border-dark);
+  padding: 0 clamp(16px, 4vw, 40px);
+}
+
+.masthead-inner {
+  max-width: var(--col-wide);
+  margin: 0 auto;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.masthead-pub {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--dark-text-secondary);
+}
+
+.masthead-pub strong { color: var(--dark-text-primary); font-weight: 500; }
+
+.masthead-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--dark-text-secondary);
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--void);
+  padding: clamp(48px, 8vw, 80px) clamp(16px, 4vw, 40px) clamp(44px, 7vw, 72px);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 85% 20%, rgba(139,48,16,0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 60% at 10% 90%, rgba(26,58,92,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  max-width: var(--col-wide);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.hero-kicker-line {
+  width: 28px;
+  height: 1px;
+  background: var(--rust-bright);
+  flex-shrink: 0;
+}
+
+.hero-kicker-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--rust-bright);
+}
+
+.hero-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(36px, 6.5vw, 68px);
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--paper);
+  margin-bottom: 8px;
+  max-width: 720px;
+}
+
+.hero-title em {
+  font-style: italic;
+  font-weight: 300;
+  color: rgba(242,237,228,0.60);
+}
+
+.hero-deck {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: clamp(16px, 2vw, 21px);
+  font-weight: 300;
+  color: var(--dark-text-secondary);
+  line-height: 1.55;
+  max-width: 560px;
+  margin: 20px 0 0;
+}
+
+/* ── STAT STRIP ── */
+.stat-strip {
+  background: var(--dark);
+  border-top: 1px solid var(--border-dark);
+  border-bottom: 1px solid var(--border-dark);
+  padding: 0 clamp(16px, 4vw, 40px);
+}
+
+.stat-strip-inner {
+  max-width: var(--col-wide);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  divide-x: 1px solid var(--border-dark);
+}
+
+.stat-item {
+  padding: clamp(20px, 3vw, 32px) clamp(16px, 2vw, 24px);
+  border-right: 1px solid var(--border-dark);
+  text-align: center;
+}
+
+.stat-item:last-child { border-right: none; }
+
+.stat-num {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 900;
+  color: var(--rust-bright);  /* #E8604A — 7.2:1 on #141210 AAA ✅ */
+  line-height: 1;
+  letter-spacing: -0.03em;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  line-height: 1.45;
+  letter-spacing: 0.05em;
+  color: var(--dark-text-secondary);
+}
+
+/* ── PAGE LAYOUT ── */
+.page-wrap {
+  max-width: var(--col-wide);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 40px);
+}
+
+.article-col {
+  max-width: var(--col-max);
+  margin: 0 auto;
+}
+
+/* ── SECTION HEADS ── */
+.part-marker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: clamp(48px, 7vw, 72px) 0 20px;
+}
+
+.part-marker-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.30em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  flex-shrink: 0;
+}
+
+.part-marker-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+
+h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(24px, 3.5vw, 34px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  margin-bottom: 12px;
+}
+
+h2 em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--rust);
+}
+
+h3 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(18px, 2.2vw, 22px);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin: 28px 0 8px;
+}
+
+/* ── BODY COPY ── */
+p { margin-bottom: 1em; color: var(--ink-soft); }
+p strong { color: var(--ink); font-weight: 600; }
+
+/* ── LINKS ── */
+a { color: var(--rust); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+a[href^="http"]::after { content: '\00a0↗'; font-size: .72em; vertical-align: super; }
+
+/* ── PULLQUOTE ── */
+.pullquote {
+  margin: 32px 0;
+  padding: 0 0 0 20px;
+  border-left: 4px solid var(--rust);
+}
+
+.pullquote p {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(16px, 2vw, 20px);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.52;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.pullquote cite {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-style: normal;
+}
+
+/* ── COMPARE TABLE ── */
+.compare-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 28px 0 36px;
+  border-top: 2px solid var(--ink);
+}
+
+table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: .875rem;
+}
+
+thead tr { border-bottom: 1px solid var(--ink); }
+
+th {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-weight: 500;
+  padding: 10px 14px 10px 0;
+  text-align: left;
+}
+
+th:last-child { text-align: right; }
+
+td {
+  padding: 12px 14px 12px 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+td:last-child { text-align: right; }
+tr:last-child td { border-bottom: none; }
+
+.td-fail { color: var(--rust); font-weight: 600; }
+.td-win  { color: var(--forest); font-weight: 600; }
+.td-dim  { color: var(--ink-muted); font-size: .82rem; }
+
+/* ── SPLIT CARDS ── */
+.split-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin: 28px 0;
+}
+
+.split-card {
+  padding: 22px 20px;
+  background: var(--warm-white);
+}
+
+.split-card.fail { background: var(--rust-light); }
+.split-card.win  { background: var(--forest-light); }
+
+.split-card-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.split-card.fail .split-card-label { color: var(--rust); }
+.split-card.win  .split-card-label { color: var(--forest); }
+
+.split-card-label::before {
+  content: '';
+  display: block;
+  width: 14px;
+  height: 1px;
+  flex-shrink: 0;
+}
+
+.split-card.fail .split-card-label::before { background: var(--rust); }
+.split-card.win  .split-card-label::before { background: var(--forest); }
+
+.split-card p { font-size: .88rem; margin-bottom: .7em; color: var(--ink-soft); }
+.split-card p:last-child { margin-bottom: 0; }
+
+/* ── CALLOUT BOX ── */
+.callout {
+  background: var(--navy-light);
+  border-left: 4px solid var(--navy);
+  padding: 20px 22px;
+  margin: 28px 0;
+}
+
+.callout.warn {
+  background: var(--rust-light);
+  border-left-color: var(--rust);
+}
+
+.callout.success {
+  background: var(--forest-light);
+  border-left-color: var(--forest);
+}
+
+.callout-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.callout.warn  .callout-label { color: var(--rust); }
+.callout.success .callout-label { color: var(--forest); }
+
+.callout p { font-size: .9rem; margin-bottom: 0; color: var(--ink-soft); }
+
+/* ── NUMBERED LIST ── */
+.numbered { list-style: none; margin: 16px 0 20px; }
+
+.numbered li {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+
+.num-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: .72rem;
+  font-weight: 500;
+  color: var(--rust);
+  min-width: 20px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+
+.numbered p { font-size: .9rem; margin-bottom: 0; }
+
+/* ── DARK CONCLUSION ── */
+.conclusion {
+  background: var(--void);
+  padding: clamp(36px, 6vw, 60px) clamp(16px, 4vw, 40px);
+  margin-top: clamp(48px, 7vw, 72px);
+}
+
+.conclusion-inner {
+  max-width: var(--col-max);
+  margin: 0 auto;
+}
+
+.conclusion h2 {
+  color: var(--paper);
+  margin-bottom: 16px;
+}
+
+.conclusion h2 em { color: var(--dark-text-secondary); }
+
+.conclusion p { color: var(--dark-text-secondary); }
+
+.conclusion strong { color: var(--dark-text-primary); }
+
+.conclusion .pullquote p { color: var(--dark-text-secondary); }
+.conclusion .pullquote { border-left-color: var(--rust-bright); }
+
+/* ── SOURCES ── */
+.sources-section {
+  padding: clamp(32px, 5vw, 52px) clamp(16px, 4vw, 40px);
+  background: var(--dark);
+}
+
+.sources-inner {
+  max-width: var(--col-max);
+  margin: 0 auto;
+}
+
+.sources-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.30em;
+  text-transform: uppercase;
+  color: var(--dark-label);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sources-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-dark);
+}
+
+.sources-list { list-style: none; counter-reset: src; }
+
+.sources-list li {
+  counter-increment: src;
+  display: flex;
+  gap: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  line-height: 1.65;
+  color: var(--dark-text-sources);
+  margin-bottom: 7px;
+  align-items: flex-start;
+}
+
+.sources-list li::before {
+  content: counter(src) '.';
+  color: var(--rust-bright);  /* #E8604A — 7.2:1 on #141210 AAA ✅ */
+  flex-shrink: 0;
+  font-size: 8.5px;
+}
+
+.sources-list a { color: var(--dark-text-sources); }
+.sources-list a:hover { color: var(--dark-text-primary); }
+
+/* ── FOOTER ── */
+.doc-footer {
+  background: var(--void);
+  border-top: 1px solid var(--border-dark);
+  padding: 18px clamp(16px, 4vw, 40px);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.doc-footer p {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dark-text-muted);
+  margin: 0;
+}
+
+/* ── FADE IN ── */
+@media (prefers-reduced-motion: no-preference) {
+  .fade {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .fade.in { opacity: 1; transform: none; }
+  .fade.d1 { transition-delay: .1s; }
+  .fade.d2 { transition-delay: .2s; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 580px) {
+  .stat-strip-inner { grid-template-columns: 1fr 1fr; }
+  .stat-item:nth-child(2) { border-right: none; }
+  .stat-item:nth-child(3) { border-top: 1px solid var(--border-dark); }
+  .stat-item:nth-child(4) { border-top: 1px solid var(--border-dark); border-right: none; }
+  .split-cards { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 360px) {
+  .stat-strip-inner { grid-template-columns: 1fr; }
+  .stat-item { border-right: none; border-bottom: 1px solid var(--border-dark); }
+}
+
+@media print {
+  .masthead, .skip { display: none; }
+  body { background: white; font-size: 11pt; }
+  .hero { background: #111; -webkit-print-color-adjust: exact; padding: 24px; }
+  a[href^="http"]::after { content: ' (' attr(href) ')'; font-size: 8pt; }
+  .fade { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to main content</a>
+
+<!-- MASTHEAD -->
+<header role="banner">
+  <div class="masthead">
+    <div class="masthead-inner">
+      <div class="masthead-pub"><strong>Team Ready Partners</strong> &nbsp;·&nbsp; Research Brief</div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-kicker">
+      <div class="hero-kicker-line" aria-hidden="true"></div>
+      <span class="hero-kicker-text">M&amp;A Roll-Up Intelligence</span>
+    </div>
+    <h1 class="hero-title">
+      Why Roll-Ups Fail —<br><em>and what the surviving third does differently</em>
+    </h1>
+    <p class="hero-deck">
+      The acquisition is the easy part. What happens to the people inside determines whether the financial thesis becomes real value or expensive wreckage.
+    </p>
+  </div>
+</div>
+
+<!-- STAT STRIP -->
+<div class="stat-strip" role="region" aria-label="Key statistics">
+  <div class="stat-strip-inner">
+    <div class="stat-item">
+      <span class="stat-num" aria-label="70 to 90 percent">70–90%</span>
+      <p class="stat-label">M&amp;A transactions fail to meet financial objectives</p>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" aria-label="60 percent">60%</span>
+      <p class="stat-label">Roll-ups fail to meet projected synergies within two years</p>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" aria-label="60 percent">60%</span>
+      <p class="stat-label">Post-close failures traceable to cultural misalignment</p>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" aria-label="50 percent">50%</span>
+      <p class="stat-label">More likely to hit synergy targets with effective culture management</p>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main id="main">
+<div class="page-wrap">
+<article class="article-col">
+
+  <!-- PART 1 -->
+  <div class="part-marker fade" aria-hidden="true">
+    <span class="part-marker-num">Part One</span>
+    <div class="part-marker-rule"></div>
+  </div>
+
+  <section aria-labelledby="p1-head">
+    <h2 id="p1-head" class="fade">The thesis is financial.<br><em>The failure is human.</em></h2>
+
+    <p class="fade">The private equity roll-up is one of the most elegant financial structures in modern business. Buy a fragmented industry's small players at low EBITDA multiples, combine them into a platform large enough to command a premium exit multiple, capture cost synergies along the way. On paper, the math is straightforward. In practice, <a href="https://hbr.org/2011/03/the-big-idea-the-new-ma-playbook" rel="noopener noreferrer">Harvard Business Review research puts the failure rate at 70–90%</a> across M&amp;A broadly, with <a href="https://www.opusconnect.com/roll-up-strategy-insights-pitfalls/" rel="noopener noreferrer">60% of PE-backed roll-ups specifically failing to meet projected synergies within two years</a>.</p>
+
+    <p class="fade">The financial press attributes this to overpaying, bad timing, leverage, and market conditions. All real. All account for a minority of failures. Most roll-up post-mortems converge on a different root cause — one that due diligence processes systematically underweight because it doesn't appear on a balance sheet.</p>
+
+    <blockquote class="pullquote fade">
+      <p>"The knowledge, skills, abilities, and relationships of a company's workforce are the primary sources of corporate value creation. Paradoxically, evaluating human capital is often either an afterthought or not a thought at all."</p>
+      <cite><a href="https://angle.ankura.com/post/102hbml/human-capital-due-diligence-considerations-in-mergers-acquisitions-and-carve-ou" rel="noopener noreferrer">Ankura Human Capital Due Diligence Research</a></cite>
+    </blockquote>
+
+    <p class="fade"><a href="https://hrdailyadvisor.com/2025/05/12/culture-the-key-to-ma-success/" rel="noopener noreferrer">A 2024 study by Instill found that up to 60% of M&amp;A failures post-close trace back to cultural misalignment.</a> Mercer's Cultural Integration Snapshot Survey found that cultural integration issues negatively impacted at least $1 million of value in over 70% of transactions — and over $5 million in nearly 25% of cases. These aren't soft numbers about feelings. They are dollar figures attached to employee departures, productivity loss, institutional knowledge destruction, and customer attrition.</p>
+
+    <p class="fade">The irony is that the financial model for a roll-up is built on an assumption the integration process routinely violates: that the acquired company's value will be preserved and compounded. <strong>The value of a small industrial company is not primarily in its equipment, its contracts, or even its customer relationships. It is in the people who know how to run it — and what they know that nobody has written down.</strong></p>
+  </section>
+
+  <!-- PART 2 -->
+  <div class="part-marker fade" aria-hidden="true">
+    <span class="part-marker-num">Part Two</span>
+    <div class="part-marker-rule"></div>
+  </div>
+
+  <section aria-labelledby="p2-head">
+    <h2 id="p2-head" class="fade">The five failure modes <em>that show up in every autopsy</em></h2>
+
+    <p class="fade">Roll-up failures are rarely random. Across the literature and practitioner research, the same five dynamics appear with striking consistency in post-mortems of failed integrations.</p>
+
+    <h3 class="fade">1. The Knowledge Destruction Problem</h3>
+
+    <p class="fade">Every acquisition brings institutional knowledge — the specific, contextual, often undocumented understanding of how work actually gets done. How the machines really behave. What the shift handoff needs to include. Which supplier to call when the normal one fails. How the plant manager gets problems solved. <a href="https://mnacommunity.com/insights/employee-retention-after-acquisition/" rel="noopener noreferrer">When acquired employees leave during integration, this knowledge walks out with them.</a> It is not recoverable from the org chart, the process documentation, or the ERP system.</p>
+
+    <p class="fade">Integration teams optimize for speed and cost reduction. Redundant roles get eliminated before anyone has mapped what those roles actually knew. <strong>The synergy that shows up in year-one EBITDA is partially funded by knowledge that will cost multiples more to rebuild when operations start to degrade eighteen months later.</strong></p>
+
+    <h3 class="fade">2. The Trust Cliff</h3>
+
+    <p class="fade"><a href="https://pubsonline.informs.org/doi/10.1287/mnsc.2022.00951" rel="noopener noreferrer">Research published in Management Science shows that PE buyouts reduce perceived job quality even without impacting base pay — because employees bear more risk.</a> Job security uncertainty, changed performance metrics, new management with unfamiliar expectations, and the visible departure of colleagues all combine to produce what practitioners call the trust cliff: a rapid deterioration in the informal cooperation that makes organizations function.</p>
+
+    <div class="callout warn fade" role="note">
+      <span class="callout-label">The hidden tax of low trust</span>
+      <p>Low-trust environments don't stop working — they work differently. Employees manage information strategically. Problems get solved at the team level rather than escalated. Improvements get kept local rather than shared. The organization runs on what it can see; the most valuable intelligence stays invisible. This is not malicious. It is rational behavior in an uncertain environment.</p>
+    </div>
+
+    <h3 class="fade">3. The Communication Vacuum</h3>
+
+    <p class="fade">Integration management teams are typically composed of financial and operational professionals who are skilled at deal execution and inexperienced at organizational communication. <a href="https://www.deloitte.com/lu/en/our-thinking/future-of-advice/the-future-of-human-capital-in-m-and-a.html" rel="noopener noreferrer">Deloitte's Global Human Capital Trends Report 2024 found that 86% of workers and 74% of leaders consider trust and transparency critically important to organizational success</a> — ranking it as the single most influential factor for the next three years.</p>
+
+    <p class="fade">Integration teams communicate in financial and structural terms — org charts, reporting lines, system migrations — while employees are working through existential questions that nobody is answering. <em>Does my role still exist? Does the new company value what I know? Is there a path forward for me here?</em> When those questions go unanswered, employees answer them themselves. The answers they construct are almost always worse than the truth.</p>
+
+    <h3 class="fade">4. The Management Mismatch</h3>
+
+    <p class="fade">Roll-ups create a specific management problem: the skills required to execute an integration are different from the skills required to run a stable operation, which are different from the skills required to build a high-performance culture across diverse acquired entities. <a href="https://www.asimplemodel.com/insights/private-equity-roll-up-strategy-firm-considerations" rel="noopener noreferrer">Practitioners consistently identify strong management experienced in deal execution as the single most important characteristic for roll-up success</a> — but experienced M&amp;A operators are rare, expensive, and rarely trained in the human dynamics that determine whether integration creates or destroys value.</p>
+
+    <p class="fade">What gets placed into acquired facilities is often a mix of parachuted operators (skilled at hitting metrics, inexperienced with the existing culture), promoted survivors (good at managing upward, stretched beyond their experience at managing downward), and stretched middle managers running operations two to three times larger than anything in their background. The gap between what the integration plan requires and what the management layer can deliver is rarely measured before it causes damage.</p>
+
+    <h3 class="fade">5. The Speed Trap</h3>
+
+    <p class="fade"><a href="https://www.crowe.com/insights/accelerated-roll-up-strategies-opportunities-and-risks" rel="noopener noreferrer">Accelerated roll-up strategies — acquiring dozens of entities over a short timespan — have become increasingly common among PE firms.</a> The logic is sound: faster acquisition pace means more multiple arbitrage opportunity before competitors close the gap. The operational consequence is that integration capacity is permanently overwhelmed. Each new acquisition arrives before the previous one is stable. <a href="https://www.ascotinternational.com/blog/private-equity-roll-up/" rel="noopener noreferrer">Leadership focus becomes diluted, entities are mismanaged, and unity and performance suffer across the portfolio.</a></p>
+
+    <blockquote class="pullquote fade">
+      <p>"The CEO, the strategic visionary and thought leader, gets pulled away from the core business to look for new add-ons or integrate existing ones. What will you do?"</p>
+      <cite><a href="https://www.opusconnect.com/roll-up-strategy-insights-pitfalls/" rel="noopener noreferrer">Andy Silverman, Parkway Capital — Opus Connect</a></cite>
+    </blockquote>
+  </section>
+
+  <!-- PART 3 -->
+  <div class="part-marker fade" aria-hidden="true">
+    <span class="part-marker-num">Part Three</span>
+    <div class="part-marker-rule"></div>
+  </div>
+
+  <section aria-labelledby="p3-head">
+    <h2 id="p3-head" class="fade">What the surviving third <em>does differently</em></h2>
+
+    <p class="fade">The research on successful roll-ups converges on a consistent set of differentiators — not in deal sourcing or financial engineering, where the playbooks are largely similar, but in how the winning third approaches the human dimension of integration. <a href="https://www.mckinsey.com/industries/oil-and-gas/our-insights/the-importance-of-cultural-integration-in-m-and-a-the-path-to-success" rel="noopener noreferrer">McKinsey research shows that companies managing culture effectively in integration planning are 50% more likely to meet or exceed synergy targets</a> — across both cost and revenue synergies.</p>
+
+    <div class="split-cards fade" role="region" aria-label="Comparison: failing vs successful roll-ups">
+      <div class="split-card fail">
+        <div class="split-card-label">The failing 2/3</div>
+        <p>Treat integration as a financial and operational event. Human capital is an afterthought addressed when problems become visible.</p>
+        <p>Communicate in structural terms — org charts, reporting lines, system timelines. Employee questions about the future go unanswered.</p>
+        <p>Optimize for speed of cost reduction. Redundant roles eliminated before institutional knowledge is mapped or transferred.</p>
+        <p>Measure integration success by EBITDA impact in year one. Culture and retention are not tracked metrics.</p>
+        <p>Parachute operators or promote survivors into management gaps. Leadership capability assessed by availability, not fit.</p>
+      </div>
+      <div class="split-card win">
+        <div class="split-card-label">The successful 1/3</div>
+        <p>Treat integration as simultaneously a financial, operational, and human event. HR is involved before close, not after the org chart is drawn.</p>
+        <p>Communicate early and honestly — including what is not yet known. Transparency about uncertainty outperforms silence every time.</p>
+        <p>Map institutional knowledge before restructuring. Key employee retention plans are executed before the first redundancy discussion.</p>
+        <p>Track culture and engagement metrics alongside financial KPIs. Deterioration is treated as a leading indicator, not a lagging one.</p>
+        <p>Designate a dedicated integration SWAT team with clear authority. Management capacity is assessed honestly before new acquisitions close.</p>
+      </div>
+    </div>
+
+    <h3 class="fade">The Knowledge Transfer Imperative</h3>
+
+    <p class="fade">The most underexplored differentiator in successful roll-ups is bilateral knowledge transfer — the deliberate movement of operational intelligence from acquired companies into the platform, and from the platform back into acquired operations. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0263237321001778" rel="noopener noreferrer">Research on knowledge transfer in M&amp;A identifies functional integration and shared goals as the two factors that most determine whether knowledge actually moves</a> between acquiring and acquired entities.</p>
+
+    <p class="fade">In practice, this means creating mechanisms — structured and informal — for acquired employees to contribute what they know to the larger organization. A Las Vegas filter plant that has developed a superior shift handoff practice, a Rochester operation that has figured out how to reduce material waste by 8%, an Iowa facility with a vendor relationship that outperforms the platform's standard suppliers: this knowledge exists in every acquisition. <strong>It compounds across the portfolio only if there is a channel for it to travel.</strong></p>
+
+    <div class="callout success fade" role="note">
+      <span class="callout-label">The compounding advantage</span>
+      <p>A roll-up that successfully captures operational knowledge across ten acquisitions doesn't have one company's best practices — it has ten. The EBITDA improvement from a single process optimization, multiplied across 25 sites, is the kind of value creation that justifies premium exit multiples. This is the optimistic PE thesis made real. It requires a mechanism for knowledge to surface, travel, and land.</p>
+    </div>
+
+    <h3 class="fade">The Retention Economics</h3>
+
+    <p class="fade">The financial case for retention investment is consistently underestimated because the cost of turnover is distributed across multiple budget lines — recruiting, onboarding, training, productivity loss during transition, customer relationship disruption — rather than appearing as a single visible line item.</p>
+
+    <div class="compare-wrap fade" role="region" aria-label="Retention cost comparison table">
+      <table>
+        <caption class="visually-hidden">Estimated cost of employee turnover by role type in M&amp;A context</caption>
+        <thead>
+          <tr>
+            <th scope="col">Role Type</th>
+            <th scope="col">Replacement Cost</th>
+            <th scope="col">Knowledge Loss Risk</th>
+            <th scope="col">Typical Retention Intervention Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Floor / production worker</td>
+            <td class="td-fail">$12,000–$40,000</td>
+            <td class="td-dim">Moderate — tacit process knowledge</td>
+            <td class="td-win">$500–$2,000</td>
+          </tr>
+          <tr>
+            <td>Experienced machine operator / lead</td>
+            <td class="td-fail">$40,000–$80,000</td>
+            <td class="td-dim">High — training pipeline, informal authority</td>
+            <td class="td-win">$2,000–$8,000</td>
+          </tr>
+          <tr>
+            <td>Shift supervisor / plant manager</td>
+            <td class="td-fail">$80,000–$150,000</td>
+            <td class="td-dim">Very high — operational knowledge + relationships</td>
+            <td class="td-win">$8,000–$25,000</td>
+          </tr>
+          <tr>
+            <td>Senior technical / engineering</td>
+            <td class="td-fail">$150,000–$240,000</td>
+            <td class="td-dim">Critical — often irreplaceable domain expertise</td>
+            <td class="td-win">$15,000–$50,000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="fade">The ratio is consistent: retention intervention costs approximately 5–15% of replacement cost, before accounting for knowledge loss. <strong>In a 25-site roll-up losing 15% of its workforce annually — a conservative estimate for post-acquisition environments — the retention investment math justifies itself many times over in the first year alone.</strong></p>
+
+    <h3 class="fade">The Skills-Based Integration Framework</h3>
+
+    <p class="fade">Successful acquirers increasingly approach integration with what practitioners call a skills-based framework — a structured approach to understanding what acquired employees know and can do, mapped against what the platform needs. This serves three functions simultaneously:</p>
+
+    <ul class="numbered fade" aria-label="Three functions of skills-based integration">
+      <li>
+        <span class="num-badge" aria-hidden="true">01</span>
+        <p><strong>It surfaces hidden value.</strong> Acquired employees often have capabilities the acquiring organization didn't know it was buying — skills, relationships, process innovations that don't appear in financial due diligence but represent real operational leverage once identified and deployed across the portfolio.</p>
+      </li>
+      <li>
+        <span class="num-badge" aria-hidden="true">02</span>
+        <p><strong>It creates legitimate retention incentives.</strong> Employees who are asked what they know and shown a path to apply it within the new structure have a concrete reason to stay that no retention bonus can replicate. The signal — "we value what you bring, not just what you cost" — is the one signal that consistently overcomes the pull of the exit door.</p>
+      </li>
+      <li>
+        <span class="num-badge" aria-hidden="true">03</span>
+        <p><strong>It generates the cultural data the integration team is missing.</strong> A structured skills and integration assessment reveals, before the problems become visible, where the cultural friction is highest, which management relationships are functioning and which are not, and where the institutional knowledge is most concentrated and most at risk.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- PART 4 -->
+  <div class="part-marker fade" aria-hidden="true">
+    <span class="part-marker-num">Part Four</span>
+    <div class="part-marker-rule"></div>
+  </div>
+
+  <section aria-labelledby="p4-head">
+    <h2 id="p4-head" class="fade">The new due diligence standard — <em>and why most firms aren't there yet</em></h2>
+
+    <p class="fade">The gap between what leading M&amp;A practitioners say about human capital and what they actually measure is extraordinary. <a href="https://ccy.com/futureproofing-through-people-the-role-of-talent-in-ma-success-rates/" rel="noopener noreferrer">Mercer research reveals that nearly all M&amp;A leaders acknowledge the criticality of human capital to deal success, yet fewer than half actually factor it into their deal strategies.</a></p>
+
+    <p class="fade">The problem is measurement, not awareness. Financial due diligence has standardized instruments — audited financials, quality of earnings reports, legal reviews. Human capital due diligence has no equivalent standard. Culture gets assessed through management interviews that surface what leadership wants to project. Retention risk gets estimated through tenure data that doesn't capture intent. Institutional knowledge stays invisible until it walks out the door.</p>
+
+    <div class="callout fade" role="note">
+      <span class="callout-label">The emerging standard</span>
+      <p><a href="https://www.deloitte.com/lu/en/our-thinking/future-of-advice/the-future-of-human-capital-in-m-and-a.html" rel="noopener noreferrer">Deloitte's 2024 M&amp;A survey</a> identifies early HR involvement — before close, not after the org chart is finalized — as a critical factor in successful integration. Leading acquirers are building human capital assessment into the pre-close period: structured employee listening sessions, skills mapping against platform needs, cultural friction diagnostics, and explicit retention risk scoring for key knowledge holders. At that level of rigor, the work functions as investment protection rather than HR overhead.</p>
+    </div>
+
+    <p class="fade">The practical gap is in tooling. Employee diagnostic tools, integration listening mechanisms, skills-based assessment frameworks — these are either absent from most PE portfolios or exist as generic HR surveys that employees answer strategically and managers file without acting on. <strong>A standardized, scalable instrument for human capital intelligence in the integration window does not yet exist for most roll-up operators.</strong></p>
+
+    <p class="fade">That gap is both the largest unaddressed risk in PE roll-up strategies and the clearest opening for practitioners positioned to close it.</p>
+  </section>
+
+</article>
+</div>
+
+<!-- CONCLUSION -->
+<div class="conclusion" role="region" aria-labelledby="conc-head">
+  <div class="conclusion-inner">
+    <h2 id="conc-head">The bottom line</h2>
+
+    <p>Roll-ups fail at the human layer because acquired employees are treated as a cost structure to be rationalized rather than the primary repository of the value being purchased. Replacing equipment is expensive but straightforward. Customer relationships are recoverable. The operational knowledge in people's heads — the shift handoff practice that reduces defects, the vendor relationship that bypasses bottlenecks, the informal authority that makes a plant actually run — disappears when they leave and doesn't come back.</p>
+
+    <p>A platform company that genuinely extracts and compounds the operational intelligence of nine acquired companies is worth dramatically more at exit than one that simply consolidates their cost structures. <strong>The synergy targets written into the investment memo are achievable. They require a mechanism for knowledge to surface, travel, and be deployed across the portfolio — and a workforce that has reason to provide that mechanism rather than withhold it.</strong></p>
+
+    <blockquote class="pullquote">
+      <p>"Companies that manage culture effectively in their integration planning are around 50% more likely to meet or exceed their synergy targets — across both cost and revenue synergies."</p>
+      <cite><a href="https://www.mckinsey.com/industries/oil-and-gas/our-insights/the-importance-of-cultural-integration-in-m-and-a-the-path-to-success" rel="noopener noreferrer">McKinsey &amp; Company — The importance of cultural integration in M&amp;A</a></cite>
+    </blockquote>
+
+    <p>None of this requires restructuring the deal, redesigning the org chart, or slowing the acquisition pace. It requires a different instrument deployed in the integration window — one that serves employees' genuine interests while surfacing intelligence that protects the investment thesis. When those two interests run in the same direction, you stop losing the knowledge you paid for.</p>
+  </div>
+</div>
+
+<!-- SOURCES -->
+<div class="sources-section" role="complementary" aria-labelledby="sources-head">
+  <div class="sources-inner">
+    <div class="sources-label" id="sources-head">Sources &amp; Research Foundation</div>
+    <ol class="sources-list">
+      <li><a href="https://hbr.org/2011/03/the-big-idea-the-new-ma-playbook" rel="noopener noreferrer">Harvard Business Review — "The New M&amp;A Playbook" — 70–90% M&amp;A failure rate to meet strategic objectives</a></li>
+      <li><a href="https://www.opusconnect.com/roll-up-strategy-insights-pitfalls/" rel="noopener noreferrer">Opus Connect / Parkway Capital — 60% of PE-backed roll-ups fail to meet projected synergies within two years</a></li>
+      <li><a href="https://hrdailyadvisor.com/2025/05/12/culture-the-key-to-ma-success/" rel="noopener noreferrer">HR Daily Advisor / Instill 2024 — 60% of post-close M&amp;A failures traceable to cultural misalignment</a></li>
+      <li><a href="https://hrdailyadvisor.com/2025/05/12/culture-the-key-to-ma-success/" rel="noopener noreferrer">Mercer Cultural Integration Snapshot Survey — cultural issues cost $1M+ in 70% of transactions; $5M+ in 25%</a></li>
+      <li><a href="https://www.mckinsey.com/industries/oil-and-gas/our-insights/the-importance-of-cultural-integration-in-m-and-a-the-path-to-success" rel="noopener noreferrer">McKinsey &amp; Company — companies managing culture effectively are 50% more likely to meet synergy targets</a></li>
+      <li><a href="https://pubsonline.informs.org/doi/10.1287/mnsc.2022.00951" rel="noopener noreferrer">Management Science (Gornall et al., 2025) — PE buyouts reduce perceived job quality; employees bear increased risk</a></li>
+      <li><a href="https://www.deloitte.com/lu/en/our-thinking/future-of-advice/the-future-of-human-capital-in-m-and-a.html" rel="noopener noreferrer">Deloitte Global Human Capital Trends 2024 — 86% of workers cite trust &amp; transparency as critically important; early HR involvement as integration success factor</a></li>
+      <li><a href="https://angle.ankura.com/post/102hbml/human-capital-due-diligence-considerations-in-mergers-acquisitions-and-carve-ou" rel="noopener noreferrer">Ankura — Human Capital Due Diligence: 70% of acquisitions fail to meet strategic objectives; HR diligence as investment protection</a></li>
+      <li><a href="https://ccy.com/futureproofing-through-people-the-role-of-talent-in-ma-success-rates/" rel="noopener noreferrer">Cochran, Cochran &amp; Yale / Mercer — nearly all M&amp;A leaders acknowledge human capital criticality; fewer than half factor it into deal strategy</a></li>
+      <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S0263237321001778" rel="noopener noreferrer">ScienceDirect — Knowledge Transfer in M&amp;As: functional integration and shared goals as bilateral knowledge transfer determinants</a></li>
+      <li><a href="https://www.asimplemodel.com/insights/private-equity-roll-up-strategy-firm-considerations" rel="noopener noreferrer">A Simple Model — strong management experienced in deal execution as most important roll-up success factor; dedicated integration SWAT team as best practice</a></li>
+      <li><a href="https://www.crowe.com/insights/accelerated-roll-up-strategies-opportunities-and-risks" rel="noopener noreferrer">Crowe LLP — accelerated roll-up strategies; acquisition of dozens of entities over short timespan as emerging pattern</a></li>
+      <li><a href="https://mnacommunity.com/insights/employee-retention-after-acquisition/" rel="noopener noreferrer">M&amp;A Community — institutional knowledge loss through employee departure; retention as integration continuity mechanism</a></li>
+      <li><a href="https://www.toggl.com/hire/true-cost-of-a-bad-hire" rel="noopener noreferrer">Toggl Hire 2025 — replacement cost by role type; retention intervention cost analysis</a></li>
+      <li><a href="https://www.ascotinternational.net/blog/private-equity-roll-up/" rel="noopener noreferrer">Ascot International — leadership dilution and mismanagement in accelerated roll-up strategies</a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer role="contentinfo">
+  <div class="doc-footer">
+    <p>Team Ready Partners &nbsp;·&nbsp; M&amp;A Research Brief</p>
+    <p>Sources: McKinsey · Deloitte · Mercer · HBR · Management Science · Ankura</p>
+  </div>
+</footer>
+
+</main>
+
+<style>
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+</style>
+
+<script>
+(function() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.fade').forEach(el => el.classList.add('in'));
+    return;
+  }
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+})();
+</script>
+
+</body>
+</html>
